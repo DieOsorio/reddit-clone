@@ -1,29 +1,55 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    
+    <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/#/">
+          Reddit Clone
+        </a>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a v-if="!isLoggedIn" @click="login()" class="button is-primary">
+              <strong>Login with Google</strong>
+            </a>
+            <div v-if="isLoggedIn">
+              <section class="avatar">
+                <figure class="is-128x128">
+                  <img :src="user.image" alt="User Image">
+                </figure>
+                <figcaption>{{user.name}}</figcaption>
+              </section>
+              <a @click="logout()" class="button is-light">
+                Logout
+              </a>
+            </div>  
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <router-view class="container main" />
+
   </div>
 </template>
 
+<script>
+import { mapActions, mapState } from 'vuex';
+
+export default {
+  computed: mapState('auth', ['user', 'isLoggedIn']),
+  methods: mapActions('auth', ['login', 'logout']),
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  .main {
+    margin-top: 2em !important;
   }
-}
+
+  .avatar {
+    float: left;
+  }
+  
 </style>
